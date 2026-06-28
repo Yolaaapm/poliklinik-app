@@ -30,16 +30,20 @@ class ObatController extends Controller
      */
     public function store(Request $request)
     {
+        // 1. Tambahkan validasi stok wajib diisi, berupa angka integer, dan minimal nilai 0
         $request->validate([
             'nama_obat' => 'required|string',
             'kemasan' => 'required|string',
             'harga' => 'required|integer',
+            'stok' => 'required|integer|min:0', 
         ]);
 
+        // 2. Masukkan data stok ke dalam array penyimpanan data baru
         Obat::create([
             'nama_obat' => $request->nama_obat,
             'kemasan' => $request->kemasan,
             'harga' => $request->harga,
+            'stok' => $request->stok, 
         ]);
 
         return redirect()->route('obat.index')->with('message', 'Data Obat Berhasil dibuat.')->with('type', 'success');
@@ -61,17 +65,21 @@ class ObatController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // 1. Tambahkan validasi stok wajib diisi saat proses pembaruan data obat
         $request->validate([
             'nama_obat' => 'required|string',
             'kemasan' => 'nullable|string',
             'harga' => 'required|integer',
+            'stok' => 'required|integer|min:0', 
         ]);
 
+        // 2. Masukkan data stok baru ke dalam baris logika update
         $obat = Obat::findOrFail($id);
         $obat->update([
             'nama_obat' => $request->nama_obat,
             'kemasan' => $request->kemasan,
-            'harga' => $request->harga
+            'harga' => $request->harga,
+            'stok' => $request->stok, 
         ]);
 
         return redirect()->route('obat.index')->with('message', 'Data Obat Berhasil di Update.')->with('type', 'success');

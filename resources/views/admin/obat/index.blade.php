@@ -15,6 +15,13 @@
         </a>
     </div>
 
+    {{-- Flash Message Notifikasi Sukses --}}
+    @if(session('message'))
+        <div class="p-4 mb-5 text-sm text-green-800 rounded-lg bg-green-50 font-semibold border border-green-200">
+            {{ session('message') }}
+        </div>
+    @endif
+
     {{-- Card --}}
     <div class="card bg-base-100 shadow-md rounded-2 border">
         <div class="card-body p-0">
@@ -28,6 +35,7 @@
                             <th class="px-6 py-4">Nama Obat</th>
                             <th class="px-6 py-4">Kemasan</th>
                             <th class="px-6 py-4">Harga</th>
+                            <th class="px-6 py-4">Stok</th> {{-- UAS: Tambahan Kolom Header Stok --}}
                             <th class="px-6 py-4 text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -52,14 +60,19 @@
                                 Rp {{ number_format($obat->harga, 0, ',', '.') }}
                             </td>
 
+                            {{-- UAS: Tambahan Output Angka Stok Obat --}}
+                            <td class="px-6 py-4 font-bold text-slate-800">
+                                {{ $obat->stok ?? 0 }}
+                            </td>
+
                             <td class="px-6 py-4 text-right">
                                 <div class="flex justify-end gap-2">
 
                                     {{-- Edit --}}
                                     <a href="{{ route('obat.edit', $obat->id) }}" class="inline-flex items-center gap-1 px-4 py-2 
-                                              bg-amber-500 hover:bg-amber-600 
-                                              text-white text-xs font-semibold 
-                                              rounded-lg transition">
+                                               bg-amber-500 hover:bg-amber-600 
+                                               text-white text-xs font-semibold 
+                                               rounded-lg transition">
                                         <i class="fas fa-pen text-xs"></i>
                                         Edit
                                     </a>
@@ -85,7 +98,8 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center py-12 text-slate-400">
+                            {{-- Ubah colspan menjadi 5 agar sejajar dengan kolom baru --}}
+                            <td colspan="5" class="text-center py-12 text-slate-400">
                                 <i class="fas fa-inbox text-3xl mb-3 block"></i>
                                 Belum ada data obat
                             </td>
